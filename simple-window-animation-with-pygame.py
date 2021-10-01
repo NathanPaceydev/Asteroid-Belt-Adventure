@@ -9,8 +9,13 @@ import numpy as np
 pygame.init()
 
 #set up the window displayed
-WINDOW_LENGTH  = 500
-WINDOW_WIDTH = 500
+# with user input
+print("Enter Window Length:")
+WINDOW_LENGTH  = int(input())
+
+print("Enter the Window Width:")
+WINDOW_WIDTH = int(input())
+
 screen = pygame.display.set_mode([WINDOW_LENGTH, WINDOW_WIDTH])
 
 # set the game to run until the user quits
@@ -42,7 +47,7 @@ while running:
                 running = False
         
         # fill the background with rgb  colour
-        screen.fill((253,40,40))
+        screen.fill((255,255,223))
     
         # create a circle on the "screen", RGB, location, size
         pygame.draw.circle(screen,(ballcolor[0], ballcolor[1], ballcolor[2]), (location[0], location[1]), size)
