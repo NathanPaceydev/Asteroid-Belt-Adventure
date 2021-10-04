@@ -143,7 +143,101 @@ class Background(pygame.sprite.Sprite):
             self.kill()
 #end Background
 
+def StartScreen():
+    #pygame.init()
+    #clock = pygame.time.Clock()
+    #create the screen obj
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    ADDASTEROID = pygame.USEREVENT+2
+    pygame.time.set_timer(ADDASTEROID,1000)
+    asteriods = pygame.sprite.Group()
 
+    all_sprites = pygame.sprite.Group()
+
+    # define the RGB value for white,
+    #  green, blue colour .
+    white = (255, 255, 255)
+    green = (0, 255, 0)
+    blue = (0, 0, 128)
+    
+    
+    # set the pygame window name
+    pygame.display.set_caption('Asteriod Belt Adventure')
+    
+    # create a font object.
+    # 1st parameter is the font file
+    # which is present in pygame.
+    # 2nd parameter is size of the font
+    font1 = pygame.font.Font('freesansbold.ttf', 32)
+    
+    # create a text surface object,
+    # on which text is drawn on it.
+    text = font1.render('Asteriod Belt Adventure', True, white, blue)
+    
+    # create a rectangular object for the
+    # text surface object
+    textRect = text.get_rect()
+    
+    # set the center of the rectangular object.
+    textRect.center = (SCREEN_WIDTH/ 2, SCREEN_HEIGHT/2)
+
+    #set up main loop
+    runflag = True
+
+    while runflag:
+        for event in pygame.event.get():
+            # did a user hit a key
+            if event.type ==KEYDOWN:
+                # is it the esc key
+                if event.key == K_ESCAPE:
+                    runflag = False
+                elif event.key == K_SPACE:
+                    runflag = False
+            # clicking the window close button listener
+            elif event.type == QUIT:
+                runflag = False
+            
+
+            elif event.type == ADDASTEROID:
+                new_asteriod = Background()
+                asteriods.add(new_asteriod)
+                all_sprites.add(new_asteriod)
+
+        
+            pressed_keys = pygame.key.get_pressed()
+            
+
+            #enemies.update()
+        asteriods.update()
+
+                
+        screen.fill((255,255,255)) # fill the screen white
+
+                #create a surface and send the length and width
+                #surf = pygame.Surface((50,50))
+
+                #Give the surface a color to seperate it from the background
+        screen.fill((0,0,0)) #black surface
+
+        for entity in all_sprites:
+            screen.blit(entity.surf, entity.rect)
+
+    
+        # copying the text surface object
+        # to the display surface object
+        # at the center coordinate.
+        screen.blit(text, textRect)
+    
+        # iterate over the list of Event objects
+        # that was returned by pygame.event.get() method.
+    
+        # Draws the surface object to the screen.
+        pygame.display.update()
+        
+        pygame.display.flip()
+
+        clock.tick(30)
+    return
 
 # Main Driver
 # Initialize pygame
@@ -153,6 +247,7 @@ clock = pygame.time.Clock()
 #create the screen obj
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+StartScreen()
 
 ADDENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(ADDENEMY,250)
