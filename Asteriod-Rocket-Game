@@ -168,7 +168,7 @@ def StartScreen():
     # 1st parameter is the font file
     # which is present in pygame.
     # 2nd parameter is size of the font
-    font1 = pygame.font.Font('freesansbold.ttf', 32)
+    font1 = pygame.font.SysFont('sitkasmallsitkatextsitkasubheadingsitkaheadingsitkadisplaysitkabanner', 32)
     
     # create a text surface object,
     # on which text is drawn on it.
@@ -195,7 +195,7 @@ def StartScreen():
                     runflag = False
             # clicking the window close button listener
             elif event.type == QUIT:
-                runflag = False
+                runflag = pygame.quit()
             
 
             elif event.type == ADDASTEROID:
