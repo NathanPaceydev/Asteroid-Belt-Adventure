@@ -1,4 +1,5 @@
 #from _typeshed import Self
+import time
 import pygame
 import random
 from pygame.constants import RLEACCEL
@@ -113,7 +114,7 @@ class Enemy(pygame.sprite.Sprite):
 class Background(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super(Background,self).__init__() 
-        backgroundImageList = ["asteroid.png","comet.png"]
+        backgroundImageList = ["asteroid.png","comet.png","rock.png","asteroid.png","asteroid.png","asteroid.png"]
         backgroundImage = backgroundImageList[random.randint(0,len(backgroundImageList)-1)]
 
         self.surf = pygame.image.load(backgroundImage).convert()
@@ -169,17 +170,21 @@ def StartScreen():
     # which is present in pygame.
     # 2nd parameter is size of the font
     font1 = pygame.font.SysFont('sitkasmallsitkatextsitkasubheadingsitkaheadingsitkadisplaysitkabanner', 32)
+    font2 = pygame.font.Font('pixelFont.ttf', 24)
     
     # create a text surface object,
     # on which text is drawn on it.
-    text = font1.render('Asteriod Belt Adventure', True, white, blue)
+    title = font1.render('Asteriod Belt Adventure', True, white, blue)
+    subtitle = font2.render("Press Space to Start", True, green)
     
     # create a rectangular object for the
     # text surface object
-    textRect = text.get_rect()
+    textRect = title.get_rect()
+    subRect = subtitle.get_rect()
     
     # set the center of the rectangular object.
-    textRect.center = (SCREEN_WIDTH/ 2, SCREEN_HEIGHT/2)
+    textRect.center = (SCREEN_WIDTH/ 2, SCREEN_HEIGHT/ 2)
+    subRect.center = ((SCREEN_WIDTH)/ 2, (SCREEN_HEIGHT+(SCREEN_HEIGHT/2))/ 2)
 
     #set up main loop
     runflag = True
@@ -226,7 +231,8 @@ def StartScreen():
         # copying the text surface object
         # to the display surface object
         # at the center coordinate.
-        screen.blit(text, textRect)
+        screen.blit(title, textRect)
+        screen.blit(subtitle, subRect)
     
         # iterate over the list of Event objects
         # that was returned by pygame.event.get() method.
@@ -235,6 +241,9 @@ def StartScreen():
         pygame.display.update()
         
         pygame.display.flip()
+
+        
+
 
         clock.tick(30)
     return
