@@ -14,6 +14,7 @@ from pygame.locals import (
     K_ESCAPE,
     KEYDOWN,
     QUIT,
+    K_SPACE
 )
 
 #constants for screen dimensions
@@ -32,7 +33,7 @@ class Player(pygame.sprite.Sprite):
         self.surf = pygame.transform.rotate(self.surf,270)
         self.surf = pygame.transform.scale(self.surf,(75,50))
 
-        #self.surf.set_colorkey((255,255,255),RLEACCEL)
+        self.surf.set_colorkey((0,0,0),RLEACCEL)
         # create the player surface length and width of 75 by 25
         #self.surf = pygame.Surface((75,25))
 
@@ -82,7 +83,7 @@ class Enemy(pygame.sprite.Sprite):
         self.surf = pygame.transform.rotate(self.surf, 90)
         self.surf = pygame.transform.scale(self.surf,((60,30)))
 
-        #self.surf.set_colorkey((255,255,255),RLEACCEL)
+        self.surf.set_colorkey((0,0,0),RLEACCEL)
         # make the enemy 20 by 10 length and width
         #self.surf = pygame.Surface((20,10))
         # make the color RGB
@@ -124,6 +125,8 @@ class Background(pygame.sprite.Sprite):
 
         if backgroundImage == 'asteroid.png':
             self.surf = pygame.transform.rotate(self.surf, rotation)
+        else:
+            self.surf = pygame.transform.rotate(self.surf, 320)
 
         self.surf.set_colorkey((0,0,0),RLEACCEL)
 
@@ -140,12 +143,15 @@ class Background(pygame.sprite.Sprite):
             self.kill()
 #end Background
 
+
+
 # Main Driver
 # Initialize pygame
 pygame.init()
 
 clock = pygame.time.Clock()
 #create the screen obj
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 ADDENEMY = pygame.USEREVENT + 1
@@ -164,13 +170,15 @@ asteriods = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 
+test = True     
+
 #set up main loop
 runflag = True
 
 while runflag:
     for event in pygame.event.get():
         # did a user hit a key
-        if event.type ==KEYDOWN:
+        if event.type == KEYDOWN:
             # is it the esc key
             if event.key == K_ESCAPE:
                 runflag = False
@@ -195,9 +203,6 @@ while runflag:
 
     enemies.update()
     asteriods.update()
-
-    
-    screen.fill((255,255,255)) # fill the screen white
 
     #create a surface and send the length and width
     surf = pygame.Surface((50,50))
@@ -228,7 +233,7 @@ while runflag:
 
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(30)
 
 #while end
 
