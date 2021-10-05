@@ -3,7 +3,7 @@ from itertools import cycle
 import time
 import pygame
 import random
-from pygame.constants import RLEACCEL
+from pygame.constants import RLEACCEL, SRCALPHA
 
 
 # define and import the controlls
@@ -165,6 +165,7 @@ def StartScreen():
     white = (255, 255, 255)
     green = (0, 255, 0)
     blue = (0, 0, 128)
+    empty = (255,255,255,0)
     
     
     # set the pygame window name
@@ -191,7 +192,9 @@ def StartScreen():
     textRect.center = (SCREEN_WIDTH/ 2, SCREEN_HEIGHT/ 2)
     blinkRect.center = ((SCREEN_WIDTH)/ 2, (SCREEN_HEIGHT+(SCREEN_HEIGHT/2))/ 2)
     
-    off_text_surface = pygame.Surface(blinkRect.size)
+    off_text_surface = pygame.Surface((blinkRect.size), flags=SRCALPHA)
+    off_text_surface.fill(empty)
+
     blink_surfaces = cycle([on_text_surface, off_text_surface])
     blink_surface = next(blink_surfaces)
     pygame.time.set_timer(BLINK_EVENT,1000)
@@ -224,7 +227,7 @@ def StartScreen():
 
         #screen.blit(blink_surface, blinkRect)
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(30)
             #
             
 
@@ -250,7 +253,7 @@ def StartScreen():
         if time.time()>start_time+2:
             screen.blit(title, textRect)
 
-        if time.time()>start_time+5:
+        if time.time()>start_time+6:
             screen.blit(blink_surface, blinkRect)
         #screen.blit(subtitle, subRect)
     
