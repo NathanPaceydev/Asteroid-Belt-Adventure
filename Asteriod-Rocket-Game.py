@@ -343,9 +343,11 @@ def main():
                 screen.blit(entity.surf, entity.rect)
 
             if pygame.sprite.spritecollideany(player,enemies):
+                for entity in all_sprites:
+                    entity.kill()
 
-                player.kill()
-                runflag = False
+                #all_sprites.kill()
+                StartScreen()
 
             rect = surf.get_rect()
 
