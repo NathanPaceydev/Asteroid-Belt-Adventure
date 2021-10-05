@@ -1,4 +1,5 @@
 #from _typeshed import Self
+from itertools import cycle
 import time
 import pygame
 import random
@@ -17,6 +18,8 @@ from pygame.locals import (
     QUIT,
     K_SPACE
 )
+
+from test_blink import BLINK_EVENT
 
 #constants for screen dimensions
 SCREEN_WIDTH = 800
@@ -144,9 +147,11 @@ class Background(pygame.sprite.Sprite):
             self.kill()
 #end Background
 
+
 def StartScreen():
     #pygame.init()
-    #clock = pygame.time.Clock()
+    start_time = time.time()
+    clock = pygame.time.Clock()
     #create the screen obj
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     ADDASTEROID = pygame.USEREVENT+2
@@ -175,16 +180,21 @@ def StartScreen():
     # create a text surface object,
     # on which text is drawn on it.
     title = font1.render('Asteriod Belt Adventure', True, white, blue)
-    subtitle = font2.render("Press Space to Start", True, green)
+    on_text_surface = font2.render("Press Space to Start", True, green)
     
     # create a rectangular object for the
     # text surface object
     textRect = title.get_rect()
-    subRect = subtitle.get_rect()
+    blinkRect = on_text_surface.get_rect()
     
     # set the center of the rectangular object.
     textRect.center = (SCREEN_WIDTH/ 2, SCREEN_HEIGHT/ 2)
-    subRect.center = ((SCREEN_WIDTH)/ 2, (SCREEN_HEIGHT+(SCREEN_HEIGHT/2))/ 2)
+    blinkRect.center = ((SCREEN_WIDTH)/ 2, (SCREEN_HEIGHT+(SCREEN_HEIGHT/2))/ 2)
+    
+    off_text_surface = pygame.Surface(blinkRect.size)
+    blink_surfaces = cycle([on_text_surface, off_text_surface])
+    blink_surface = next(blink_surfaces)
+    pygame.time.set_timer(BLINK_EVENT,1000)
 
     #set up main loop
     runflag = True
@@ -192,6 +202,9 @@ def StartScreen():
     while runflag:
         for event in pygame.event.get():
             # did a user hit a key
+            if event.type == BLINK_EVENT:
+                blink_surface = next(blink_surfaces)
+
             if event.type ==KEYDOWN:
                 # is it the esc key
                 if event.key == K_ESCAPE:
@@ -199,24 +212,27 @@ def StartScreen():
                 elif event.key == K_SPACE:
                     runflag = False
             # clicking the window close button listener
-            elif event.type == QUIT:
+            if event.type == QUIT:
                 runflag = pygame.quit()
-            
 
-            elif event.type == ADDASTEROID:
+            if event.type == ADDASTEROID:
                 new_asteriod = Background()
                 asteriods.add(new_asteriod)
                 all_sprites.add(new_asteriod)
-
-        
+            
             pressed_keys = pygame.key.get_pressed()
+
+        #screen.blit(blink_surface, blinkRect)
+        pygame.display.update()
+        clock.tick(60)
+            #
             
 
             #enemies.update()
         asteriods.update()
 
                 
-        screen.fill((255,255,255)) # fill the screen white
+        #screen.fill((255,255,255)) # fill the screen white
 
                 #create a surface and send the length and width
                 #surf = pygame.Surface((50,50))
@@ -231,8 +247,12 @@ def StartScreen():
         # copying the text surface object
         # to the display surface object
         # at the center coordinate.
-        screen.blit(title, textRect)
-        screen.blit(subtitle, subRect)
+        if time.time()>start_time+2:
+            screen.blit(title, textRect)
+
+        if time.time()>start_time+5:
+            screen.blit(blink_surface, blinkRect)
+        #screen.blit(subtitle, subRect)
     
         # iterate over the list of Event objects
         # that was returned by pygame.event.get() method.
@@ -245,101 +265,108 @@ def StartScreen():
         
 
 
-        clock.tick(30)
+        #clock.tick(30)
     return
 
 # Main Driver
-# Initialize pygame
-pygame.init()
+def main():
+    # Initialize pygame
+    pygame.init()
+    try:
 
-clock = pygame.time.Clock()
-#create the screen obj
+        clock = pygame.time.Clock()
+        #create the screen obj
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-StartScreen()
+        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        StartScreen()
 
-ADDENEMY = pygame.USEREVENT + 1
-pygame.time.set_timer(ADDENEMY,250)
+        ADDENEMY = pygame.USEREVENT + 1
+        pygame.time.set_timer(ADDENEMY,250)
 
-ADDASTEROID = pygame.USEREVENT+2
-pygame.time.set_timer(ADDASTEROID,1000)
+        ADDASTEROID = pygame.USEREVENT+2
+        pygame.time.set_timer(ADDASTEROID,1000)
 
-#call an instance of the player class
-player = Player()
+        #call an instance of the player class
+        player = Player()
 
-enemies = pygame.sprite.Group()
+        enemies = pygame.sprite.Group()
 
-asteriods = pygame.sprite.Group()
+        asteriods = pygame.sprite.Group()
 
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
+        all_sprites = pygame.sprite.Group()
+        all_sprites.add(player)
 
-test = True     
+        test = True     
 
-#set up main loop
-runflag = True
+        #set up main loop
+        runflag = True
 
-while runflag:
-    for event in pygame.event.get():
-        # did a user hit a key
-        if event.type == KEYDOWN:
-            # is it the esc key
-            if event.key == K_ESCAPE:
+        while runflag:
+            for event in pygame.event.get():
+                # did a user hit a key
+                if event.type == KEYDOWN:
+                    # is it the esc key
+                    if event.key == K_ESCAPE:
+                        runflag = False
+                # clicking the window close button listener
+                elif event.type == QUIT:
+                    runflag = False
+                
+                elif event.type == ADDENEMY:
+                    new_enemy = Enemy()
+                    enemies.add(new_enemy)
+                    all_sprites.add(new_enemy)
+
+                elif event.type == ADDASTEROID:
+                    new_asteriod = Background()
+                    asteriods.add(new_asteriod)
+                    all_sprites.add(new_asteriod)
+
+            
+            pressed_keys = pygame.key.get_pressed()
+            
+            player.update(pressed_keys)
+
+            enemies.update()
+            asteriods.update()
+
+            #create a surface and send the length and width
+            surf = pygame.Surface((50,50))
+
+            #Give the surface a color to seperate it from the background
+            screen.fill((0,0,0)) #black surface
+
+            for entity in all_sprites:
+                screen.blit(entity.surf, entity.rect)
+
+            if pygame.sprite.spritecollideany(player,enemies):
+
+                player.kill()
                 runflag = False
-        # clicking the window close button listener
-        elif event.type == QUIT:
-            runflag = False
-        
-        elif event.type == ADDENEMY:
-            new_enemy = Enemy()
-            enemies.add(new_enemy)
-            all_sprites.add(new_enemy)
 
-        elif event.type == ADDASTEROID:
-            new_asteriod = Background()
-            asteriods.add(new_asteriod)
-            all_sprites.add(new_asteriod)
+            rect = surf.get_rect()
 
-    
-    pressed_keys = pygame.key.get_pressed()
-    
-    player.update(pressed_keys)
-
-    enemies.update()
-    asteriods.update()
-
-    #create a surface and send the length and width
-    surf = pygame.Surface((50,50))
-
-    #Give the surface a color to seperate it from the background
-    screen.fill((0,0,0)) #black surface
-
-    for entity in all_sprites:
-        screen.blit(entity.surf, entity.rect)
-
-    if pygame.sprite.spritecollideany(player,enemies):
-
-        player.kill()
-        runflag = False
-
-    rect = surf.get_rect()
-
-    surf_center = (
-        (SCREEN_WIDTH-surf.get_width())/2,
-        (SCREEN_HEIGHT-surf.get_height())/2
-    )
+            surf_center = (
+                (SCREEN_WIDTH-surf.get_width())/2,
+                (SCREEN_HEIGHT-surf.get_height())/2
+            )
 
 
-    #draw the surface at the center of the screen
-    screen.blit(player.surf, player.rect)
+            #draw the surface at the center of the screen
+            screen.blit(player.surf, player.rect)
 
 
 
-    pygame.display.flip()
+            pygame.display.flip()
 
-    clock.tick(30)
+            clock.tick(30)
 
-#while end
+    finally:
+        pygame.quit()
+
+    #while end
 
 
 
+if __name__ == '__main__':
+    main()
