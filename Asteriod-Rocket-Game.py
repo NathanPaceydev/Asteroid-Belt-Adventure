@@ -19,7 +19,7 @@ from pygame.locals import (
     K_SPACE
 )
 
-from test_blink import BLINK_EVENT
+BLINK_EVENT = pygame.USEREVENT + 0
 
 #constants for screen dimensions
 SCREEN_WIDTH = 800
