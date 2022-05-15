@@ -156,7 +156,7 @@ def StartScreen():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     ADDASTEROID = pygame.USEREVENT+2
     pygame.time.set_timer(ADDASTEROID,1000)
-    asteriods = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
 
     all_sprites = pygame.sprite.Group()
 
@@ -169,7 +169,7 @@ def StartScreen():
     
     
     # set the pygame window name
-    pygame.display.set_caption('Asteriod Belt Adventure')
+    pygame.display.set_caption('Asteroid Belt Adventure')
     
     # create a font object.
     # 1st parameter is the font file
@@ -180,7 +180,7 @@ def StartScreen():
     
     # create a text surface object,
     # on which text is drawn on it.
-    title = font1.render('Asteriod Belt Adventure', True, white, blue)
+    title = font1.render('Asteroid Belt Adventure', True, white, blue)
     on_text_surface = font2.render("Press Space to Start", True, green)
     
     # create a rectangular object for the
@@ -219,9 +219,9 @@ def StartScreen():
                 runflag = pygame.quit()
 
             if event.type == ADDASTEROID:
-                new_asteriod = Background()
-                asteriods.add(new_asteriod)
-                all_sprites.add(new_asteriod)
+                new_asteroid = Background()
+                asteroids.add(new_asteroid)
+                all_sprites.add(new_asteroid)
             
             pressed_keys = pygame.key.get_pressed()
 
@@ -232,7 +232,7 @@ def StartScreen():
             
 
             #enemies.update()
-        asteriods.update()
+        asteroids.update()
 
                 
         #screen.fill((255,255,255)) # fill the screen white
@@ -294,7 +294,7 @@ def main():
 
         enemies = pygame.sprite.Group()
 
-        asteriods = pygame.sprite.Group()
+        asteroids = pygame.sprite.Group()
 
         all_sprites = pygame.sprite.Group()
         all_sprites.add(player)
@@ -321,9 +321,9 @@ def main():
                     all_sprites.add(new_enemy)
 
                 elif event.type == ADDASTEROID:
-                    new_asteriod = Background()
-                    asteriods.add(new_asteriod)
-                    all_sprites.add(new_asteriod)
+                    new_asteroid = Background()
+                    asteroids.add(new_asteroid)
+                    all_sprites.add(new_asteroid)
 
             
             pressed_keys = pygame.key.get_pressed()
@@ -331,7 +331,7 @@ def main():
             player.update(pressed_keys)
 
             enemies.update()
-            asteriods.update()
+            asteroids.update()
 
             #create a surface and send the length and width
             surf = pygame.Surface((50,50))
