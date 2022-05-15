@@ -1,4 +1,4 @@
-# Asteriod Game in Python
+# Asteroid Game in Python
 This is my first time using the pygame library and creating a true game in python.
 Below is a short clip of Asteriod Belt Adventure the game I designed, a flying scroller where the player aviods the rockets flying at them.
 
