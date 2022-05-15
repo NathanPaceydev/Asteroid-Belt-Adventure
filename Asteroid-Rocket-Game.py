@@ -82,7 +82,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super(Enemy, self).__init__()
         # load the image
-        self.surf = pygame.image.load("missel.png").convert()
+        self.surf = pygame.image.load("missile.png").convert()
         # roate and scale the missle image
         self.surf = pygame.transform.rotate(self.surf, 90)
         self.surf = pygame.transform.scale(self.surf,((60,30)))
