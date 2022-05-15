@@ -167,7 +167,8 @@ def StartScreen():
     blue = (0, 0, 128)
     empty = (255,255,255,0)
     
-    
+    icon = pygame.image.load("rocket.png").convert_alpha()
+    pygame.display.set_icon(icon)
     # set the pygame window name
     pygame.display.set_caption('Asteroid Belt Adventure')
     
